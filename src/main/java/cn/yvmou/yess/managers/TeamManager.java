@@ -3,6 +3,7 @@ package cn.yvmou.yess.managers;
 import cn.yvmou.yess.Y;
 import cn.yvmou.yess.storage.PlayerDataStorage;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -72,6 +73,11 @@ public class TeamManager {
         else return teamStatus != null;
     }
 
+    private void removePrefix(Player player) {
+        player.setDisplayName(player.getName());
+        player.setPlayerListName(player.getName());
+    }
+
     /**
      * 创建队伍
      * @param senderPlayer 发送命令的玩家对象
@@ -115,6 +121,7 @@ public class TeamManager {
         }
 
         playerDataStorage.removePlayerData(targetPlayer);
+        removePrefix(targetPlayer);
         targetPlayer.sendMessage("§a* " + senderPlayer.getName() + "将你从队伍中移除");
         senderPlayer.sendMessage("§a你已将" + targetPlayer.getName() + "从队伍中移除");
     }
@@ -177,6 +184,7 @@ public class TeamManager {
         for (Player member : onlineMembers) {
             member.sendMessage("§a" + senderPlayer + "已解散你的队伍");
             playerDataStorage.removePlayerData(member);
+            removePrefix(member);
         }
         for (OfflinePlayer member : offlineMembers) {
             playerDataStorage.removePlayerData(member);
@@ -300,6 +308,36 @@ public class TeamManager {
             if (memberData != null && memberData.equalsIgnoreCase(leader)) {
                 member.sendMessage("§a" + senderPlayer.getName() + "退出了队伍");
             }
+        }
+    }
+
+    public void setPrefix(Player senderPlayer, String p) {
+        String prefix;
+        if (!hasTeam(senderPlayer) ||
+                !playerDataStorage.getPlayerData(senderPlayer).equalsIgnoreCase(senderPlayer.getName())) {
+            senderPlayer.sendMessage("§c只有队长能够使用该命令");
+            return;
+        }
+
+        List<Player> members = new ArrayList<>();
+
+        for (Player member : plugin.getServer().getOnlinePlayers()) {
+            String memberData = playerDataStorage.getPlayerData(member);
+            if (memberData != null && memberData.equalsIgnoreCase(senderPlayer.getName())) {
+                members.add(member);
+            }
+        }
+
+        if (p.length() > 10) {
+            senderPlayer.sendMessage("§c前缀过长！不能超过10");
+            return;
+        }
+
+        for (Player member : members) {
+            prefix = ChatColor.translateAlternateColorCodes('&', p);
+            member.setDisplayName(prefix + member.getName());
+            member.setPlayerListName(prefix + member.getName());
+            playerDataStorage.setPlayerData(senderPlayer, member, prefix);
         }
     }
 }

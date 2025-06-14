@@ -6,7 +6,7 @@ prefix: YEss
 authors:
   - yvmoux
   - Findoutsider
-description: a ess plguin
+description: a basic plugin
 website: www.yvmou.cn
 softdepend: ["PlaceholderAPI"]
 folia-supported: true

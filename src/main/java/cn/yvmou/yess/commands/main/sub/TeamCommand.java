@@ -54,6 +54,7 @@ public class TeamCommand implements SubCommand {
             case "remove" -> teamManager.removePlayer(player, plugin.getServer().getPlayer(args[2]));
             case "promote" -> teamManager.promotePlayer(player, plugin.getServer().getPlayer(args[2]));
             case "disband" -> teamManager.disbandTeam(player);
+            case "prefix" -> teamManager.setPrefix(player, args[2]);
             case "show" -> teamManager.showTeam(player);
             case "leave" -> teamManager.leaveTeam(player);
             case "accept" -> teamManager.acceptTeam(player);
@@ -103,6 +104,7 @@ public class TeamCommand implements SubCommand {
         player.sendMessage("§f/yess team remove <玩家> §7- 将玩家移出队伍");
         player.sendMessage("§f/yess team promote <玩家> §7- 将队长转让给玩家");
         player.sendMessage("§f/yess team disband §7- 解散队伍");
+        player.sendMessage("§f/yess team prefix §7- 更改队员前缀");
         player.sendMessage("§b--- 队员命令 ---");
         player.sendMessage("§f/yess team show §7- 预览当前队伍");
         player.sendMessage("§f/yess team leave §7- 离开当前队伍");

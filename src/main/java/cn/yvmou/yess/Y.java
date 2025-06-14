@@ -1,6 +1,5 @@
 package cn.yvmou.yess;
 
-import cn.yvmou.yess.managers.AFKManager;
 import cn.yvmou.yess.managers.GiftManager;
 import cn.yvmou.yess.expansion.PapiExpansion;
 import cn.yvmou.yess.managers.TeamManager;
@@ -20,10 +19,9 @@ public final class Y extends JavaPlugin {
     private static Y instance;
     private static FoliaLib foliaLib;
     private static PluginStorage pluginStorage;
-    private static PlayerDataStorage playerStorage;
+    public static PlayerDataStorage playerStorage;
     private static GiftManager giftManager;
     private static TeamManager teamManager;
-    private static AFKManager afkManager;
 
     public static Plugin getInstance() {
         return instance;
@@ -33,7 +31,6 @@ public final class Y extends JavaPlugin {
     public static PlayerDataStorage getPlayerStorage() {return playerStorage;}
     public static GiftManager getGiftManager() {return giftManager;}
     public static TeamManager getTeamManager() {return teamManager;}
-    public static AFKManager getAFKManager() {return afkManager;}
 
     @Override
     public void onEnable() {
@@ -49,7 +46,6 @@ public final class Y extends JavaPlugin {
 
         giftManager = new GiftManager(this); // 初始化礼包管理器
         teamManager = new TeamManager(this, playerStorage);
-        afkManager = new AFKManager();
 
         new CommandManager(this).registerCommands();
         new ListenerManager(this).registerListener();

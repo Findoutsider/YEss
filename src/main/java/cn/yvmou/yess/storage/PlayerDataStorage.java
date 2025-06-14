@@ -27,6 +27,12 @@ public class PlayerDataStorage {
 
     }
 
+    public void setPlayerData(Player leader, Player member, String p) {
+        data = member.getPersistentDataContainer();
+
+        data.set(new NamespacedKey(plugin, leader.getName()), PersistentDataType.STRING, p);
+    }
+
     public void removePlayerData(Player member) {
 
         data = member.getPersistentDataContainer();
@@ -50,6 +56,11 @@ public class PlayerDataStorage {
 
         data = player.getPlayer().getPersistentDataContainer();
         return data.get(new NamespacedKey(plugin, "team"), PersistentDataType.STRING);
+    }
+
+    public String getPlayerData(String leader, Player member) {
+        data = member.getPersistentDataContainer();
+        return data.get(new NamespacedKey(plugin, leader), PersistentDataType.STRING);
     }
 
     public boolean isInvited(Player player) {
