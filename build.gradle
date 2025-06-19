@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'cn.yvmou'
-version = '1.0.0'
+version = '1.0.1'
 
 repositories {
     mavenCentral()
@@ -56,11 +56,25 @@ processResources {
     filesMatching('plugin.yml') {
         expand props
     }
+    filesMatching('config.yml') {
+        expand props
+    }
 }
 
+// 禁用标准的 jar 任务（不生成普通 JAR）
+tasks.named('jar') {
+    enabled = false
+}
 
+// 确保 build 任务只依赖 shadowJar
+tasks.named('build') {
+    dependsOn('shadowJar')
+    // 移除对 jar 的默认依赖（可选，因为已经禁用了 jar 任务）
+    dependsOn -= tasks.jar
+}
 
 shadowJar {
+    archiveFileName = "YEss-${version}.jar"
     // !! MAKE SURE TO CHANGE THIS TO YOUR PLUGIN'S GROUP & PLUGIN NAME !!
     relocate("com.tcoded.folialib", "cn.yvmou.yess.lib.folialib")
 
@@ -69,15 +83,15 @@ shadowJar {
     // minimize {
     //     exclude dependency("com.github.technicallycoded:FoliaLib:.*")
     // }
+    exclude("org/jetbrains/annotations/**")
+    exclude("org/intellij/lang/annotations/**")
 }
-
-tasks.build.dependsOn tasks.shadowJar
 
 // 构建后将文件复制到服务器插件文件夹
 tasks.register('copy', Copy) {
     from "build/libs" // 源文件夹, 在这里是构建产物的文件夹=
     into 'E:/_SERVER/1.21.4/plugins' // 目标文件夹, 在这里是调试服务端的插件文件夹
-    include "YEss-${version}-all.jar"  // 可选：只复制特定类型的文件,支持正则表达式 在这里只规定该名称的文件可以被复制到目标文件夹 }
+    include "YEss-${version}.jar"  // 可选：只复制特定类型的文件,支持正则表达式 在这里只规定该名称的文件可以被复制到目标文件夹 }
 }
 tasks.named('copy').configure {
     dependsOn(build) // 确保在构建后执行

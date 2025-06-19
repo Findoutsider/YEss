@@ -35,7 +35,6 @@ public final class Y extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
-
         // 初始化
         instance = this;
 
