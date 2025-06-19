@@ -1,23 +1,25 @@
 package cn.yvmou.yess.storage;
 
 import cn.yvmou.yess.Y;
+import cn.yvmou.yess.utils.LoggerUtils;
+
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
+import java.util.logging.LogManager;
 
-public class YamlStorage implements PluginStorage {
+public class YamlStorage implements Storage{
     private final Y plugin;
-    private YamlConfiguration dataConfig;
     private File dataFolder;
     private File dataFile;
+    private YamlConfiguration dataConfig;
 
     public YamlStorage(Y plugin) {
         this.plugin = plugin;
-        this.init();
+        init();
     }
 
     @Override
@@ -26,10 +28,10 @@ public class YamlStorage implements PluginStorage {
         if (!dataFolder.exists()) {
             dataFolder.mkdirs();
         }
-
-        dataFile = new File(dataFolder, "data.yml");
+        dataFile = new File(dataFolder, "player_data.yml");
 
         dataConfig = YamlConfiguration.loadConfiguration(dataFile);
+
         try {
             dataConfig.save(dataFile);
         } catch (IOException e) {
@@ -38,55 +40,37 @@ public class YamlStorage implements PluginStorage {
     }
 
     @Override
-    public void shutdown() {
-    }
-
-    @Override
-    public void setGlowing(UUID playerId, boolean glowing) {
-        Set<UUID> glowingPlayers = getAllGlowingPlayers();
-        if (glowing) {
-            glowingPlayers.add(playerId);
+    public <T> void saveData(UUID uuid, String type, T data) {
+        dataConfig.set("player_data." + uuid + ".name", Bukkit.getOfflinePlayer(uuid).getName());
+        if (data instanceof Boolean || data instanceof String || data instanceof Integer || data instanceof Double) {
+            dataConfig.set("player_data." + uuid + "." + type, data);
         } else {
-            glowingPlayers.remove(playerId);
+            LoggerUtils.error("不支持的数据类型" + data.getClass().getName());
         }
-        dataConfig.set("glowing-players", glowingPlayers.stream()
-                .map(UUID::toString)
-                .toList());
         save();
     }
 
     @Override
-    public boolean isGlowing(UUID playerId) {
-        return getAllGlowingPlayers().contains(playerId);
-    }
-
-    @Override
-    public Set<UUID> getAllGlowingPlayers() {
-        Set<UUID> glowingPlayers = new HashSet<>();
-        if (dataConfig.contains("glowing-players")) {
-            for (String uuidString : dataConfig.getStringList("glowing-players")) {
-                try {
-                    glowingPlayers.add(UUID.fromString(uuidString));
-                } catch (IllegalArgumentException e) {
-                    plugin.getLogger().warning("无效的UUID格式: " + uuidString);
-                }
-            }
+    public <T> T loadData(UUID uuid, String type, Class<T> clazz) {
+        Object data = dataConfig.get("player_data." + uuid + "." + type);
+        if (clazz.isInstance(data)) {
+            return clazz.cast(data);
+        } else {
+            LoggerUtils.warn("数据类型不匹配: " + type + "，实际类型: " + (data == null ? "null" : data.getClass().getName()));
+            return null;
         }
-        return glowingPlayers;
     }
 
     @Override
-    public void clearAll() {
-        dataConfig.set("glowing-players", null);
-        save();
+    public void close() {
     }
+
 
     private void save() {
         try {
             dataConfig.save(dataFile);
         } catch (IOException e) {
-            plugin.getLogger().severe("无法保存发光状态数据: " + e.getMessage());
+            plugin.getLogger().severe("无法保存玩家数据: " + e.getMessage());
         }
     }
 }
-

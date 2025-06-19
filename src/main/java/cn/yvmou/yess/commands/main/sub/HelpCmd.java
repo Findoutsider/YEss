@@ -30,7 +30,7 @@ public class HelpCmd implements SubCommand {
     }
 
     @Override
-    public Boolean requireRegister() {
+    public boolean requireRegister() {
         return plugin.getConfig().getBoolean("registerCommand.help.enable", false);
     }
 

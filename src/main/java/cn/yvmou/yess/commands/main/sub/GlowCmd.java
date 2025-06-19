@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Map;
 import java.util.UUID;
 
 public class GlowCmd implements SubCommand {
@@ -46,17 +47,17 @@ public class GlowCmd implements SubCommand {
     }
 
     @Override
-    public Boolean requireRegister() {
+    public boolean requireRegister() {
         return plugin.getConfig().getBoolean("registerCommand.glow.enable", true);
     }
 
     private void glowToggle(Player player) {
-        UUID playerId = player.getUniqueId();
-        boolean currentlyGlowing = Y.getPluginStorage().isGlowing(playerId);
+        UUID uuid = player.getUniqueId();
+        boolean currentlyGlowing = Y.getPlayerData().getIsGlowing(uuid);
 
         if (currentlyGlowing) {
             player.removePotionEffect(PotionEffectType.GLOWING);
-            Y.getPluginStorage().setGlowing(playerId, false);
+            Y.getPlayerData().setIsGlowing(uuid, false);
             player.sendMessage(ChatColor.RED + "发光效果已移除!");
         } else {
             player.addPotionEffect(
@@ -69,7 +70,7 @@ public class GlowCmd implements SubCommand {
                             true
                     )
             );
-            Y.getPluginStorage().setGlowing(playerId, true);
+            Y.getPlayerData().setIsGlowing(uuid, true);
             player.sendMessage(ChatColor.RED + "你获得了发光效果");
         }
     }

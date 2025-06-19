@@ -43,7 +43,7 @@ public class OpenEnderChestCmd implements SubCommand {
     }
 
     @Override
-    public Boolean requireRegister() {
+    public boolean requireRegister() {
         return plugin.getConfig().getBoolean("registerCommand.ec.enable", true);
     }
 }

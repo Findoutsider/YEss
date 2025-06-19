@@ -43,7 +43,7 @@ public class OpenCraftCmd implements SubCommand {
     }
 
     @Override
-    public Boolean requireRegister() {
+    public boolean requireRegister() {
         return plugin.getConfig().getBoolean("registerCommand.craft.enable", true);
     }
 }

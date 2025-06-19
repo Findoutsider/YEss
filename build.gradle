@@ -58,6 +58,8 @@ processResources {
     }
 }
 
+
+
 shadowJar {
     // !! MAKE SURE TO CHANGE THIS TO YOUR PLUGIN'S GROUP & PLUGIN NAME !!
     relocate("com.tcoded.folialib", "cn.yvmou.yess.lib.folialib")
@@ -69,6 +71,7 @@ shadowJar {
     // }
 }
 
+tasks.build.dependsOn tasks.shadowJar
 
 // 构建后将文件复制到服务器插件文件夹
 tasks.register('copy', Copy) {
@@ -82,4 +85,6 @@ tasks.named('copy').configure {
 tasks.named('copy').configure {
     dependsOn(tasks.shadowJar) // 确保 shadowJar 在 copy 任务之前执行
 }
+
+
 

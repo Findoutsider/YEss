@@ -92,7 +92,7 @@ public class TeamCommand implements SubCommand {
      * @return 注册命令返回是，否则否
      */
     @Override
-    public Boolean requireRegister() {
+    public boolean requireRegister() {
         return plugin.getConfig().getBoolean("registerCommand.team.enable", true);
     }
 

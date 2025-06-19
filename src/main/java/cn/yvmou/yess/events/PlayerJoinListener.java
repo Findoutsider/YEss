@@ -30,7 +30,7 @@ public class PlayerJoinListener implements Listener {
             player.setDisplayName(playerStorage.getPlayerData(leader, player));
         }
 
-        if (Y.getPluginStorage().isGlowing(player.getUniqueId())) {
+        if (Y.getPlayerData().getIsGlowing(player.getUniqueId())) {
             player.addPotionEffect(new PotionEffect(
                     PotionEffectType.GLOWING,
                     Integer.MAX_VALUE,
@@ -39,6 +39,8 @@ public class PlayerJoinListener implements Listener {
                     false,
                     true
             ));
+        } else {
+            player.removePotionEffect(PotionEffectType.GLOWING);
         }
     }
 }

@@ -3,11 +3,12 @@ package cn.yvmou.yess;
 import cn.yvmou.yess.managers.GiftManager;
 import cn.yvmou.yess.expansion.PapiExpansion;
 import cn.yvmou.yess.managers.TeamManager;
+import cn.yvmou.yess.storage.PlayerData;
 import cn.yvmou.yess.storage.PlayerDataStorage;
+import cn.yvmou.yess.storage.Storage;
 import cn.yvmou.yess.utils.LoggerUtils;
 import cn.yvmou.yess.utils.manager.CommandManager;
-import cn.yvmou.yess.storage.PluginStorage;
-import cn.yvmou.yess.storage.StorageFactory;
+import cn.yvmou.yess.storage.StorageType;
 import cn.yvmou.yess.utils.manager.ListenerManager;
 import com.tcoded.folialib.FoliaLib;
 import org.bukkit.Bukkit;
@@ -18,7 +19,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class Y extends JavaPlugin {
     private static Y instance;
     private static FoliaLib foliaLib;
-    private static PluginStorage pluginStorage;
+    private static PlayerData playerData;
+    private static Storage storage;
     public static PlayerDataStorage playerStorage;
     private static GiftManager giftManager;
     private static TeamManager teamManager;
@@ -27,7 +29,8 @@ public final class Y extends JavaPlugin {
         return instance;
     }
     public static FoliaLib getFoliaLib() {return foliaLib;}
-    public static PluginStorage getPluginStorage() {return pluginStorage;}
+    public static PlayerData getPlayerData() { return playerData; }
+    public static Storage getStorage() {return storage;}
     public static PlayerDataStorage getPlayerStorage() {return playerStorage;}
     public static GiftManager getGiftManager() {return giftManager;}
     public static TeamManager getTeamManager() {return teamManager;}
@@ -41,7 +44,9 @@ public final class Y extends JavaPlugin {
 
         foliaLib = new FoliaLib(this);
 
-        pluginStorage = StorageFactory.createStorage(this); // 初始化插件存储
+        playerData = new PlayerData();
+
+        storage = StorageType.createStorage(this); // 初始化插件存储
         playerStorage = new PlayerDataStorage(this);
 
         giftManager = new GiftManager(this); // 初始化礼包管理器
@@ -60,8 +65,8 @@ public final class Y extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // 关闭存储系统
-        if (pluginStorage != null) {pluginStorage.shutdown();}
+//        // 关闭存储系统
+//        if (pluginStorage != null) {pluginStorage.shutdown();}
 
         LoggerUtils.info(ChatColor.RED + "插件卸载成功！");
     }

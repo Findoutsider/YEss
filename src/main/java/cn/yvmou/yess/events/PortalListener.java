@@ -48,7 +48,7 @@ public class PortalListener implements Listener {
         }
     }
 
-    private Boolean isInRegion(Location loc) {
+    private boolean isInRegion(Location loc) {
         String world = plugin.getConfig().getString("portal.world", "world");
 
         Location regionMin = new Location(

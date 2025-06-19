@@ -32,5 +32,5 @@ public interface SubCommand {
      *
      * @return 注册命令返回是，否则否
      */
-    Boolean requireRegister();
+    boolean requireRegister();
 }
