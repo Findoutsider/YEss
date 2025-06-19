@@ -28,7 +28,7 @@ public class SchedulerUtils {
         if (Y.getFoliaLib().isFolia()) {
             Y.getFoliaLib().getScheduler().runLater(runnable, delay);
         } else {
-            Bukkit.getScheduler().runTask(plugin, runnable);
+            Bukkit.getScheduler().runTaskLater(plugin, runnable, delay);
         }
     }
 

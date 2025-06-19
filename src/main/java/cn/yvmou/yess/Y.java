@@ -1,10 +1,9 @@
 package cn.yvmou.yess;
 
-import cn.yvmou.yess.managers.GiftManager;
+import cn.yvmou.yess.managers.GiftM;
 import cn.yvmou.yess.expansion.PapiExpansion;
-import cn.yvmou.yess.managers.TeamManager;
-import cn.yvmou.yess.storage.PlayerData;
-import cn.yvmou.yess.storage.PlayerDataStorage;
+import cn.yvmou.yess.managers.TeamM;
+import cn.yvmou.yess.managers.GlowM;
 import cn.yvmou.yess.storage.Storage;
 import cn.yvmou.yess.utils.LoggerUtils;
 import cn.yvmou.yess.utils.manager.CommandManager;
@@ -19,21 +18,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class Y extends JavaPlugin {
     private static Y instance;
     private static FoliaLib foliaLib;
-    private static PlayerData playerData;
+    private static GlowM glowM;
     private static Storage storage;
-    public static PlayerDataStorage playerStorage;
-    private static GiftManager giftManager;
-    private static TeamManager teamManager;
+    private static GiftM giftM;
+    private static TeamM teamM;
 
     public static Plugin getInstance() {
         return instance;
     }
     public static FoliaLib getFoliaLib() {return foliaLib;}
-    public static PlayerData getPlayerData() { return playerData; }
     public static Storage getStorage() {return storage;}
-    public static PlayerDataStorage getPlayerStorage() {return playerStorage;}
-    public static GiftManager getGiftManager() {return giftManager;}
-    public static TeamManager getTeamManager() {return teamManager;}
+    public static GlowM glowM() { return glowM; }
+    public static GiftM getGiftM() {return giftM;}
+    public static TeamM getTeamM() {return teamM;}
 
     @Override
     public void onEnable() {
@@ -44,13 +41,11 @@ public final class Y extends JavaPlugin {
 
         foliaLib = new FoliaLib(this);
 
-        playerData = new PlayerData();
-
         storage = StorageType.createStorage(this); // 初始化插件存储
-        playerStorage = new PlayerDataStorage(this);
 
-        giftManager = new GiftManager(this); // 初始化礼包管理器
-        teamManager = new TeamManager(this, playerStorage);
+        giftM = new GiftM(this); // 初始化礼包管理器
+        teamM = new TeamM(this, storage);
+        glowM = new GlowM(storage);
 
         new CommandManager(this).registerCommands();
         new ListenerManager(this).registerListener();
@@ -65,8 +60,8 @@ public final class Y extends JavaPlugin {
 
     @Override
     public void onDisable() {
-//        // 关闭存储系统
-//        if (pluginStorage != null) {pluginStorage.shutdown();}
+        // 关闭存储系统
+        if (storage != null) {storage.close();}
 
         LoggerUtils.info(ChatColor.RED + "插件卸载成功！");
     }

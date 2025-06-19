@@ -31,7 +31,7 @@ public class PapiExpansion extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, @NotNull String params) {
         if (params.equalsIgnoreCase("glow_status")) {
-            return Y.getPlayerData().getIsGlowing(player.getUniqueId()) ? "on" : "off";
+            return Y.glowM().getIsGlowing(player.getUniqueId()) ? "on" : "off";
         }
         return null;
     }

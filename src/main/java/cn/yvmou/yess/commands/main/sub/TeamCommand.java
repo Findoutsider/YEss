@@ -2,17 +2,14 @@ package cn.yvmou.yess.commands.main.sub;
 
 import cn.yvmou.yess.Y;
 import cn.yvmou.yess.commands.SubCommand;
-import cn.yvmou.yess.managers.TeamManager;
+import cn.yvmou.yess.managers.TeamM;
 import cn.yvmou.yess.utils.CommandUtils;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
-
 public class TeamCommand implements SubCommand {
     private final Y plugin;
-    private final TeamManager teamManager = Y.getTeamManager();
+    private final TeamM teamM = Y.getTeamM();
 
     public TeamCommand(Y plugin) {
         this.plugin = plugin;
@@ -38,31 +35,56 @@ public class TeamCommand implements SubCommand {
         }
 
         String subCommand = args[1].toLowerCase();
-
-        if (subCommand.equalsIgnoreCase("invite") ||
-                subCommand.equalsIgnoreCase("remove") ||
-                subCommand.equalsIgnoreCase("promote")) {
-            if (args.length != 3) {
-                sender.sendMessage(ChatColor.RED + "§c用法错误！请输入 /yess team " + subCommand + " <玩家>");
-                return false;
-            }
-        }
+        String targetName = args.length > 2 ? args[2] : "";
 
         switch (subCommand) {
-            case "create" -> teamManager.createTeam(player);
-            case "invite" -> teamManager.inviteTeam(player, plugin.getServer().getPlayer(args[2]));
-            case "remove" -> teamManager.removePlayer(player, plugin.getServer().getPlayer(args[2]));
-            case "promote" -> teamManager.promotePlayer(player, plugin.getServer().getPlayer(args[2]));
-            case "disband" -> teamManager.disbandTeam(player);
-            case "prefix" -> teamManager.setPrefix(player, args[2]);
-            case "show" -> teamManager.showTeam(player);
-            case "leave" -> teamManager.leaveTeam(player);
-            case "accept" -> teamManager.acceptTeam(player);
-            case "deny" -> teamManager.denyTeam(player);
-            default -> sendHelp(player);
+            case "create" -> teamM.createTeam(player);
+            case "invite" -> {
+                if (targetName.isEmpty()) {
+                    player.sendMessage("§c请输入玩家名称！");
+                    return false;
+                }
+                Player target = plugin.getServer().getPlayerExact(targetName);
+                if (target != null) {
+                    teamM.inviteTeam(player, target);
+                } else {
+                    player.sendMessage("§c该玩家不在线！");
+                }
+            }
+            case "remove" -> {
+                if (targetName.isEmpty()) {
+                    player.sendMessage("§c请输入玩家名称！");
+                    return false;
+                }
+                Player target = plugin.getServer().getPlayerExact(targetName);
+                if (target != null) {
+                    teamM.removePlayer(player, target);
+                } else {
+                    player.sendMessage("§c该玩家不在线！");
+                }
+            }
+            case "promote" -> {
+                if (targetName.isEmpty()) {
+                    player.sendMessage("§c请输入玩家名称！");
+                    return false;
+                }
+                Player target = plugin.getServer().getPlayerExact(targetName);
+                if (target != null) {
+                    teamM.promotePlayer(player, target);
+                } else {
+                    player.sendMessage("§c该玩家不在线！");
+                }
+            }
+            case "disband" -> teamM.disbandTeam(player);
+            case "show" -> teamM.showTeam(player);
+            case "leave" -> teamM.leaveTeam(player);
+            case "accept" -> teamM.acceptTeam(player);
+            case "deny" -> teamM.denyTeam(player);
+            case "help" -> sendHelp(player);
+            default -> player.sendMessage(getUsage());
         }
 
-        return false;
+        return true;
     }
 
     /**
@@ -104,8 +126,7 @@ public class TeamCommand implements SubCommand {
         player.sendMessage("§f/yess team remove <玩家> §7- 将玩家移出队伍");
         player.sendMessage("§f/yess team promote <玩家> §7- 将队长转让给玩家");
         player.sendMessage("§f/yess team disband §7- 解散队伍");
-        player.sendMessage("§f/yess team prefix §7- 更改队员前缀");
-        player.sendMessage("§b--- 队员命令 ---");
+        player.sendMessage("§b--- 成员命令 ---");
         player.sendMessage("§f/yess team show §7- 预览当前队伍");
         player.sendMessage("§f/yess team leave §7- 离开当前队伍");
         player.sendMessage("§f/yess team accept §7- 同意加入队伍");

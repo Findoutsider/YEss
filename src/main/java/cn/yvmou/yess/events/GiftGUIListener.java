@@ -50,23 +50,23 @@ public class GiftGUIListener implements Listener {
             if (slot == 49) { // 保存按钮
                 List<ItemStack> items = new ArrayList<>();
                 for (int i = 0; i < 45; i++) {
-                    ItemStack item = Y.getGiftManager().getGiftEditGUI().getInventory().getItem(i);
+                    ItemStack item = Y.getGiftM().getGiftEditGUI().getInventory().getItem(i);
 
                     if (item != null) {
                         items.add(item);
                     }
 
-                    Y.getGiftManager().getItems().addAll(items);
+                    Y.getGiftM().getItems().addAll(items);
                 }
 
-                Y.getGiftManager().saveGiftItems(Y.getGiftManager().getGiftEditGUI().getGiftName());
+                Y.getGiftM().saveGiftItems(Y.getGiftM().getGiftEditGUI().getGiftName());
 
                 player.closeInventory();
             } else if (slot == 45) { // 取消按钮
                 player.closeInventory();
             } else if (slot == 53) { // 清空按钮
                 for (int i = 0; i < 45; i++) {
-                    Y.getGiftManager().getGiftEditGUI().getInventory().setItem(i, null);
+                    Y.getGiftM().getGiftEditGUI().getInventory().setItem(i, null);
                 }
                 player.sendMessage("§c礼包已清空！");
             }

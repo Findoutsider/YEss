@@ -13,14 +13,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GiftManager {
+public class GiftM {
     private final Y plugin;
     private final GiftEditGUI giftEditGUI;
     private final GiftLookGUI giftLookGUI;
     private final List<ItemStack> items = new ArrayList<>();
     private File giftsFolder;
 
-    public GiftManager(Y plugin) {
+    public GiftM(Y plugin) {
         this.plugin = plugin;
         this.giftEditGUI = new GiftEditGUI();
         this.giftLookGUI = new GiftLookGUI();

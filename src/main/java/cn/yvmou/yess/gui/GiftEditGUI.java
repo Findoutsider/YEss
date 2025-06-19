@@ -24,7 +24,7 @@ public class GiftEditGUI {
         this.giftName = giftName;
         inventory = Bukkit.createInventory(null, 54, "§6编辑礼包: " + giftName);
         // 加载已保存的物品
-        List<ItemStack> savedItems = Y.getGiftManager().loadGiftItems(giftName);
+        List<ItemStack> savedItems = Y.getGiftM().loadGiftItems(giftName);
         for (int i = 0; i < savedItems.size() && i < 45; i++) {
             inventory.setItem(i, savedItems.get(i));
         }

@@ -10,10 +10,6 @@ public interface Storage {
 
     /**
      * 保存玩家数据
-     * @param data 需要保存的玩家数据
-     */
-    /**
-     * 保存玩家数据
      * 
      * @param uuid 玩家 UUID
      * @param type 数据保存类型标识
@@ -28,10 +24,11 @@ public interface Storage {
      * @param uuid 玩家 UUID
      * @param type 数据保存类型标识
      * @param clazz 期望返回的数据类型的 Class 对象
-     * @param <T> 返回的数据类型
+     * @param defaultData 价值数据的默认值
      * @return 如果类型匹配则返回数据，否则返回 null
+     * @param <T> 返回的数据类型
      */
-    <T> T loadData(UUID uuid, String type, Class<T> clazz);
+    <T> T loadData(UUID uuid, String type, Class<T> clazz, T defaultData);
 
     /**
      * 关闭存储连接

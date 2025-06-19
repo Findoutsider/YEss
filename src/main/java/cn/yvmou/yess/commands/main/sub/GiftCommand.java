@@ -46,7 +46,7 @@ public class GiftCommand implements SubCommand {
                     player.sendMessage("§c请输入礼包名称！");
                     return false;
                 }
-                if (Y.getGiftManager().createGift(giftName)) {
+                if (Y.getGiftM().createGift(giftName)) {
                     player.sendMessage("§a成功创建礼包：" + giftName);
                 } else {
                     player.sendMessage("§c礼包已存在！");
@@ -57,15 +57,15 @@ public class GiftCommand implements SubCommand {
                     player.sendMessage("§c请输入礼包名称！");
                     return false;
                 }
-                if (Y.getGiftManager().existsGift(giftName)) {
-                    Y.getGiftManager().getGiftEditGUI().init(giftName);
-                    Y.getGiftManager().getGiftEditGUI().open(player);
+                if (Y.getGiftM().existsGift(giftName)) {
+                    Y.getGiftM().getGiftEditGUI().init(giftName);
+                    Y.getGiftM().getGiftEditGUI().open(player);
                 } else {
                     player.sendMessage("§c礼包不存在！");
                 }
             }
             case "list" -> {
-                List<String> gifts = Y.getGiftManager().getGiftList();
+                List<String> gifts = Y.getGiftM().getGiftList();
                 if (gifts.isEmpty()) {
                     player.sendMessage("§c暂无礼包！");
                 } else {
@@ -78,7 +78,7 @@ public class GiftCommand implements SubCommand {
                     player.sendMessage("§c请输入礼包名称！");
                     return false;
                 }
-                for (ItemStack item : Y.getGiftManager().getGiftItem(giftName)) {
+                for (ItemStack item : Y.getGiftM().getGiftItem(giftName)) {
                     player.getInventory().addItem(item);
                 }
             }
@@ -89,7 +89,7 @@ public class GiftCommand implements SubCommand {
                 }
                 Player target = Bukkit.getPlayerExact(args[3]);
                 if (target != null) {
-                    for (ItemStack item : Y.getGiftManager().getGiftItem(giftName)) {
+                    for (ItemStack item : Y.getGiftM().getGiftItem(giftName)) {
                         target.getInventory().addItem(item);
                     }
                 } else sender.sendMessage(ChatColor.RED + "这个玩家不在线");
@@ -101,8 +101,8 @@ public class GiftCommand implements SubCommand {
                 }
                 Player target = Bukkit.getPlayerExact(args[3]);
                 if (target != null) {
-                    Y.getGiftManager().getGiftLookGUI().init(giftName);
-                    Y.getGiftManager().getGiftLookGUI().open(target);
+                    Y.getGiftM().getGiftLookGUI().init(giftName);
+                    Y.getGiftM().getGiftLookGUI().open(target);
                 } else sender.sendMessage(ChatColor.RED + "这个玩家不在线");
             }
             case "delete" -> {
@@ -110,7 +110,7 @@ public class GiftCommand implements SubCommand {
                     player.sendMessage("§c请输入礼包名称！");
                     return false;
                 }
-                Y.getGiftManager().deleteGift(giftName, player);
+                Y.getGiftM().deleteGift(giftName, player);
             }
             case "help" -> sendHelp(player);
             default -> sender.sendMessage(getUsage());
@@ -170,7 +170,7 @@ public class GiftCommand implements SubCommand {
 //            completions.add("edit");
 //            completions.add("list");
 //        } else if (args.length == 2 && (args[0].equalsIgnoreCase("edit"))) {
-//            completions.addAll(Y.getGiftManager().getGiftList());
+//            completions.addAll(Y.getGiftM().getGiftList());
 //        }
 //
 //        return completions;

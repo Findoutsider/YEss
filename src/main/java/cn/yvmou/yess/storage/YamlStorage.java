@@ -9,7 +9,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
-import java.util.logging.LogManager;
 
 public class YamlStorage implements Storage{
     private final Y plugin;
@@ -42,6 +41,11 @@ public class YamlStorage implements Storage{
     @Override
     public <T> void saveData(UUID uuid, String type, T data) {
         dataConfig.set("player_data." + uuid + ".name", Bukkit.getOfflinePlayer(uuid).getName());
+        if (data == null) {
+            dataConfig.set("player_data." + uuid + "." + type, null);
+            save();
+            return;
+        }
         if (data instanceof Boolean || data instanceof String || data instanceof Integer || data instanceof Double) {
             dataConfig.set("player_data." + uuid + "." + type, data);
         } else {
@@ -51,12 +55,15 @@ public class YamlStorage implements Storage{
     }
 
     @Override
-    public <T> T loadData(UUID uuid, String type, Class<T> clazz) {
+    public <T> T loadData(UUID uuid, String type, Class<T> clazz, T defaultValue) {
         Object data = dataConfig.get("player_data." + uuid + "." + type);
+        if (data == null) {
+            return defaultValue;
+        }
         if (clazz.isInstance(data)) {
             return clazz.cast(data);
         } else {
-            LoggerUtils.warn("数据类型不匹配: " + type + "，实际类型: " + (data == null ? "null" : data.getClass().getName()));
+            LoggerUtils.warn("数据类型不匹配: " + type + "，实际类型: " + data.getClass().getName());
             return null;
         }
     }
