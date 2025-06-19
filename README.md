@@ -15,6 +15,9 @@
 - /yess gift <create|edit|give|help>
   - yess.command.gift
 
+- /yess team <create|invite|remove|promote|disband|show|leave|accept|deny>
+  - yess.command.team
+
 - /yess help
   - yess.command.help
 - /yess reload
@@ -23,10 +26,10 @@
 ## Config.yml
 
 ```yaml
-Version: 1.0.0
+version: ${version}
 
 # 该项的更改需要重启服务器才能生效
-RegisterCommand:
+registerCommand:
   reload:
     enable: true
     alias: "none"
@@ -37,11 +40,11 @@ RegisterCommand:
     permission: "yess.command.help"
   craft:
     enable: true
-    alias: "craft"
+    alias: "craft, c"
     permission: "yess.command.craft"
   ec:
     enable: true
-    alias: "ec"
+    alias: "enderchest, ec"
     permission: "yess.command.ec"
   glow:
     enable: true
@@ -51,6 +54,10 @@ RegisterCommand:
     enable: true
     alias: "gift"
     permission: "yess.command.gift"
+  team:
+    enable: true
+    alias: "team"
+    permission: "yess.command.team"
 
 # 存储类型: yaml, mysql 或 sqlite
 storage:
@@ -78,6 +85,10 @@ portal:
     y: 78
     z: 2
 
+disableNetherPortal:
+  - spawn
+  - afk
+  - arena
 ```
 
 ## PAPI
